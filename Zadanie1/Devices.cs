@@ -25,14 +25,20 @@ namespace ver1
 
         public void PowerOff()
         {
-            state = IDevice.State.off;
-            Console.WriteLine("... Device is off !");
+            if (GetState() == IDevice.State.on)
+            {
+                state = IDevice.State.off;
+                Console.WriteLine("... Device is off !");
+            }
         }
 
         public void PowerOn()
         {
-            state = IDevice.State.on;
-            Console.WriteLine("Device is on ...");
+            if(GetState() == IDevice.State.off)
+            {
+                state = IDevice.State.on;
+                Console.WriteLine("Device is on ...");
+            }
         }
 
         public int Counter { get; private set; } = 0;
@@ -46,6 +52,8 @@ namespace ver1
         /// <param name="document">obiekt typu IDocument, różny od `null`</param>
         void Print(in IDocument document);
     }
+
+
 
     public interface IScanner : IDevice
     {

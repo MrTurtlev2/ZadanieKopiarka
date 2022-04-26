@@ -8,43 +8,56 @@ using ver1;
 namespace Zadanie1
 {
 
-    public class Copier : IPrinter, IScanner
+    public class Copier : IPrinter, IScanner, IDevice
     {
+        private IDevice.State state;
+
         public int PrintCounter { get; set; }
         public int ScanCounter { get; set; }
         public int Counter { get; set; }
 
+        public string FormatedDate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss");
+
         public IDevice.State GetState()
         {
-            throw new NotImplementedException();
+           return state = IDevice.State.off;
         }
 
         public void PowerOff()
         {
-            throw new NotImplementedException();
+            if (GetState() == IDevice.State.on)
+            {
+                state = IDevice.State.off;
+                Console.WriteLine("... Device is off !");
+            }
         }
 
         public void PowerOn()
         {
-            throw new NotImplementedException();
+            if (GetState() == IDevice.State.off)
+            {
+                state = IDevice.State.on;
+                Console.WriteLine("Device is on ...");
+                Counter++;
+            }
         }
 
         public void Print(in IDocument document)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(FormatedDate + " Print: " + document.GetFileName());
+            PrintCounter++;
         }
 
         public void Scan(out IDocument document, IDocument.FormatType formatType)
         {
-            throw new NotImplementedException();
+            document = new TextDocument("readme.txt");
+
+            Console.WriteLine(FormatedDate + " Scan: " + document.GetFileName());
+
+            ScanCounter++;
         }
 
         internal void ScanAndPrint()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void Stan(out IDocument doc2)
         {
             throw new NotImplementedException();
         }
