@@ -61,4 +61,11 @@ namespace ver1
         // w przeciwnym przypadku nic się dzieje
         void Scan(out IDocument document, IDocument.FormatType formatType);
     }
+
+    public interface ICopier : IDevice
+    {
+        int PrintCounter { get; }
+        int ScanCounter { get; }
+        void ScanAndPrint();
+    }
 }

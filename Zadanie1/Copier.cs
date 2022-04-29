@@ -8,58 +8,76 @@ using ver1;
 namespace Zadanie1
 {
 
-    public class Copier : IPrinter, IScanner, IDevice
+    public class Copier : BaseDevice, IPrinter, IScanner
     {
-        private IDevice.State state;
-
         public int PrintCounter { get; set; }
         public int ScanCounter { get; set; }
-        public int Counter { get; set; }
+        public new int Counter { get; set; }
 
         public string FormatedDate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss");
 
-        public IDevice.State GetState()
-        {
-           return state = IDevice.State.off;
-        }
-
-        public void PowerOff()
+        public void Print(in IDocument document)
         {
             if (GetState() == IDevice.State.on)
             {
-                state = IDevice.State.off;
-                Console.WriteLine("... Device is off !");
+     
+                Console.WriteLine("{0} Print: {1}", FormatedDate, document.GetFileName());
+                ++PrintCounter;
             }
+        }
+
+        public void Scan(out IDocument document, IDocument.FormatType formatType = IDocument.FormatType.TXT)
+        {
+
+            /*formatType = IDocument.FormatType.TXT;*/
+
+            if (GetState() == IDevice.State.off)
+            {
+                document = null;
+                return;
+            }
+
+
+            ++ScanCounter;
+
+            switch (formatType)
+            {
+                case IDocument.FormatType.JPG:
+                    document = new ImageDocument($"ImageScan{ScanCounter}.jpg");
+                    break;
+
+                case IDocument.FormatType.PDF:
+                    document = new PDFDocument($"PDFScan{ScanCounter}.pdf");
+                    break;
+
+                case IDocument.FormatType.TXT:
+                    document = new TextDocument($"TextScan{ScanCounter}.txt");
+                    break;
+
+                default:
+                    throw new ArgumentException("Undefined file type!");
+            }
+
+            Console.WriteLine("{0} Scan: {1}", FormatedDate, document.GetFileName());
+        }
+
+        public void ScanAndPrint()
+        {
+            IDocument document;
+
+            Scan(out document, IDocument.FormatType.JPG);
+
+            Print(document);
         }
 
         public void PowerOn()
         {
             if (GetState() == IDevice.State.off)
             {
-                state = IDevice.State.on;
-                Console.WriteLine("Device is on ...");
-                Counter++;
+                ++Counter;
             }
-        }
 
-        public void Print(in IDocument document)
-        {
-            Console.WriteLine(FormatedDate + " Print: " + document.GetFileName());
-            PrintCounter++;
-        }
-
-        public void Scan(out IDocument document, IDocument.FormatType formatType)
-        {
-            document = new TextDocument("readme.txt");
-
-            Console.WriteLine(FormatedDate + " Scan: " + document.GetFileName());
-
-            ScanCounter++;
-        }
-
-        internal void ScanAndPrint()
-        {
-            throw new NotImplementedException();
+            base.PowerOn();
         }
     }
 }

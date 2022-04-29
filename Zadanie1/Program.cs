@@ -13,11 +13,11 @@ namespace Zadanie1
             xerox.Print(in doc1);
 
 
-            IDocument doc2;
+           IDocument doc2;
 
-            xerox.Scan(out doc2, IDocument.FormatType.TXT);
+           xerox.Scan(out doc2, IDocument.FormatType.TXT);
 
-            /*xerox.ScanAndPrint();*/
+            xerox.ScanAndPrint();
             System.Console.WriteLine(xerox.Counter);
             System.Console.WriteLine(xerox.PrintCounter);
             System.Console.WriteLine(xerox.ScanCounter);
